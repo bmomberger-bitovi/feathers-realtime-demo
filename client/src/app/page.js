@@ -6,11 +6,17 @@ import { useFind } from 'figbird';
 export default function Home() {
   return (
     <main className={styles.main}>
-      <h1>Welcome to the first annual Worcester Cribbage Open</h1>
+      <h1>Welcome to Crazy for Cribbage!</h1>
       <Leaderboard />
     </main>
   )
 }
+
+const Pairings = () => {
+  return (
+    <h3>Current Round Pairings:</h3>
+  );
+};
 
 const Leaderboard = () => {
   const { data: teams, total } = useFind('teams');

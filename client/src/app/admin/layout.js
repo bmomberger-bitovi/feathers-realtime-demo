@@ -8,6 +8,8 @@ export default function AdminLinks({ children }) {
         {" | "}
         <Link href="/admin/teams">Teams Admin</Link>
         {" | "}
+        <Link href="/admin/rounds">Rounds and Pairings</Link>
+        {" | "}
         <Link href="/admin/scores">Record Scores</Link>
       </div>
       {children}

@@ -1,9 +1,14 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/client.html
 import { feathers } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
+
 import { scoresClient } from './services/scores/scores.shared.js'
 
 import { teamsClient } from './services/teams/teams.shared.js'
+
+import { roundPairingsClient } from './services/round-pairings/round-pairings.shared.js'
+
+import { roundsClient } from './services/rounds/rounds.shared.js'
 
 /**
  * Returns a  client for the feathers-realtime-react-demo app.
@@ -21,8 +26,11 @@ export const createClient = (connection, authenticationOptions = {}) => {
   client.set('connection', connection)
 
   client.configure(teamsClient)
+  client.configure(roundPairingsClient)
 
   client.configure(scoresClient)
+
+  client.configure(roundsClient)
 
   return client
 }

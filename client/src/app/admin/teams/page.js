@@ -8,13 +8,17 @@ export default function TeamsAdmin() {
   const { data } = useFind('teams');
   const { create, remove } = useMutation('teams');
   const [newTeamName, setNewTeamName] = useState();
+  const [newPlayer1, setNewPlayer1] = useState();
+  const [newPlayer2, setNewPlayer2] = useState();
 
   const handleCreateNew = useCallback(
     () => {
-      create({ name: newTeamName });
+      create({ name: newTeamName, player1: newPlayer1, player2: newPlayer2 });
       setNewTeamName('');
+      setNewPlayer1('');
+      setNewPlayer2('');
     },
-    [create, newTeamName]
+    [create, newTeamName, newPlayer1, newPlayer2]
   );
   const handleRemove = useCallback(
     (item) => {
@@ -37,6 +41,15 @@ export default function TeamsAdmin() {
           Team name: 
           <input value={newTeamName} onChange={(ev) => setNewTeamName(ev.target.value)} />
         </div>
+        <div>
+          Player 1: 
+          <input value={newPlayer1} onChange={(ev) => setNewPlayer1(ev.target.value)} />
+        </div>
+        <div>
+          Player 2:
+          <input value={newPlayer2} onChange={(ev) => setNewPlayer2(ev.target.value)} />
+        </div>
+
         <div>
           <button onClick={handleCreateNew} >Create team</button>
         </div>
