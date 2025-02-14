@@ -1,20 +1,24 @@
 "use client"
 import { useCallback, useMemo, useState } from 'react';
-import { useFind, useMutation } from 'figbird';
+import { useFind, useGet, useMutation } from 'figbird';
 import styles from '../../page.module.css';
 
 
 export default function RoundsAdmin() {
-  const { data } = useFind('round-pairings');
+  const { data: pairings } = useFind('round-pairings');
   const { create } = useMutation('rounds');
+  const { patch: updateRound } = useMutation('app-state');
+  const appStateResponse = useGet('app-state', 1);
   const [newTeamName, setNewTeamName] = useState();
 
+  const state = appStateResponse.data || {};
+
   const pairingsByRound = useMemo(() => {
-    return data ? data.reduce((acc, datum) => ({
+    return pairings ? pairings.reduce((acc, datum) => ({
       ...acc,
       [datum.round]: [...(acc[datum.round] ?? []), datum]
     }), {}) : {};
-  }, [data]);
+  }, [pairings]);
 
   const handleCreateNew = useCallback(
     () => {
@@ -41,6 +45,14 @@ export default function RoundsAdmin() {
             </li>
           ))}
         </ul>
+      </div>
+      <div>
+        <h3>Set current round</h3>
+        <select value={state.round} onChange={ev => updateRound(1, { round: +ev.target.value })}>
+          {new Array(+state.lastRound || 1).fill(0).map((z, i) => i + 1).map(round => (
+            <option key={`Round-${round}-option`}>{round}</option>
+          ))}
+        </select>
       </div>
       <div>
         <h3>Add new round</h3>

@@ -25,9 +25,11 @@ export const scoresDataSchema = {
   $id: 'ScoresData',
   type: 'object',
   additionalProperties: false,
-  required: ['roundPairing', 'gameNumber', 'score1', 'score2'],
+  required: ['round_pairing_id', 'score1', 'score2'],
   properties: {
-    ...scoresSchema.properties
+    score1: { type: 'number' },
+    score2: { type: 'number' },
+    round_pairing_id: { type: 'number' },
   }
 }
 export const scoresDataValidator = getValidator(scoresDataSchema, dataValidator)
@@ -58,8 +60,7 @@ export const scoresQuerySchema = {
   additionalProperties: false,
   properties: {
     ...querySyntax({
-      ...scoresSchema.properties,
-      roundPairing: { $ref: 'RoundPairingsQuery' },
+      round_pairing_id: { type: 'number' },
     }),
   }
 }

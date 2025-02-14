@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 6rem;
+  padding: 3rem;
   min-height: 100vh;
 }
 
@@ -107,6 +107,12 @@
   position: absolute;
   filter: blur(45px);
   transform: translateZ(0);
+}
+
+.table3col {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  margin-bottom: 1em;
 }
 
 .logo {

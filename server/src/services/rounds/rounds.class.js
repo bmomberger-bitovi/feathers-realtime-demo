@@ -15,7 +15,7 @@ export class RoundsService {
     for(let i = 0; i < number; i++) {
       teams.push(teams.shift()); // rotate rest i times.
     }
-    const bottomHalf = teams.splice(teams.length / 2);
+    const bottomHalf = teams.splice(teams.length / 2).reverse();
     const topHalf = [floater, ...teams];
 
     const result = { pairings: [] }

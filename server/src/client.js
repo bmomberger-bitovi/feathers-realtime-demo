@@ -10,6 +10,8 @@ import { roundPairingsClient } from './services/round-pairings/round-pairings.sh
 
 import { roundsClient } from './services/rounds/rounds.shared.js'
 
+import { appStateClient } from './services/app-state/app-state.shared.js'
+
 /**
  * Returns a  client for the feathers-realtime-react-demo app.
  *
@@ -31,6 +33,8 @@ export const createClient = (connection, authenticationOptions = {}) => {
   client.configure(scoresClient)
 
   client.configure(roundsClient)
+
+  client.configure(appStateClient)
 
   return client
 }
