@@ -31,14 +31,6 @@ export const calculateTeamScores = (scores) => {
       scoresByTeam[team2.id].totalVictoryMargin += (score2 > 61 ? 1 : 2) * (score2 - score1);
     }
 
-    if (team1.name === 'Highlanders') {
-      console.log(scoresByTeam[team1.id]);
-    }
-    if (team2.name === 'Highlanders') {
-      console.log(scoresByTeam[team2.id]);
-    }
-
-
   });
   return scoresByTeam;
 };
