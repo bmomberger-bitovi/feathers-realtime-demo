@@ -5,7 +5,11 @@ export class ScoresService extends KnexService {}
 
 export const getOptions = (app) => {
   return {
-    paginate: app.get('paginate'),
+    paginate: {
+      ...app.get('paginate'),
+      default: 300,
+      max: 300,
+    },
     Model: app.get('postgresqlClient'),
     name: 'scores'
   }

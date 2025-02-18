@@ -6,7 +6,7 @@ import { calculateTeamScores, TOURNAMENT_SCORE_TEMPLATE } from '../util/team-sco
 
 const calculateAverageMargin = (tournamentScore) => {
   return tournamentScore?.totalWins > 0
-    ? (tournamentScore.totalVictoryMargin / tournamentScore.totalWins).toFixed(2)
+    ? (tournamentScore.totalVictoryMargin / tournamentScore.totalWins)
     : 0;
 }
 
@@ -23,7 +23,7 @@ export default function Home() {
           <Leaderboard />
         </div>
         <div style={{ minWidth: "49%", border: '3px solid red', padding: '1rem' }}> 
-          <Pairings round={state.round} />
+          <Pairings round={state.round} lastRound={state.lastRound} />
         </div>
       </div>
     </main>
@@ -31,9 +31,15 @@ export default function Home() {
 }
 
 const Pairings = ({
-  round
+  round,
+  lastRound,
 }) => {
   const { data: pairings } = useFind('round-pairings', { query: { round } });
+  const { data: nextRoundPairings } = useFind('round-pairings', { query: { round: round + 1 } });
+  let { data: teamsOnBye } = useFind('teams');
+  pairings?.forEach(({ team1, team2 }) => {
+    teamsOnBye = teamsOnBye.filter(team => team.id !== team1.id && team.id !== team2.id);
+  });
 
   return (
     <section style={{ display: 'flex', flexFlow: 'column nowrap' }}>
@@ -44,6 +50,23 @@ const Pairings = ({
           <li key={`pairing-${round}-${team1.name}-${team2.name}`}>{team1.name} vs {team2.name}</li>
         ))}
       </ul>
+
+      <br />
+
+      {round < lastRound && (
+        <>
+        <h3>Next Round ({round + 1}) Pairings:</h3>
+
+        <ul style={{ marginLeft: '1rem'}}>
+          {nextRoundPairings?.map(({ team1, team2 }) => (
+            <li key={`pairing-${round + 1}-${team1.name}-${team2.name}`}>{team1.name} vs {team2.name}</li>
+          ))}
+        </ul>
+        </>
+      )}
+
+      <br />
+
     </section>
   );
 };
@@ -54,27 +77,7 @@ const Leaderboard = () => {
 
   const scoresByTeam = calculateTeamScores(scores ?? []);
 
-  if(teams) {
-    teams.sort((a, b) => {
-      const aScore = scoresByTeam[a.id] ?? TOURNAMENT_SCORE_TEMPLATE;
-      const bScore = scoresByTeam[b.id] ?? TOURNAMENT_SCORE_TEMPLATE;
-      const aAvg = calculateAverageMargin(scoresByTeam[a.id]);
-      const bAvg = calculateAverageMargin(scoresByTeam[b.id]);
-
-      if(aScore.tournamentPoints < bScore.tournamentPoints) {
-        return 1;
-      }
-      if(aScore.tournamentPoints > bScore.tournamentPoints) {
-        return -1;
-      }
-      if(aAvg < bAvg) {
-        return 1;
-      }
-      if(bAvg > aAvg) {
-        return 0;
-      }
-    })
-  }
+  console.log(scoresByTeam)
 
   let isTie = false;
   let lastUniqueId = -1;
@@ -83,10 +86,32 @@ const Leaderboard = () => {
     const retVal = {
       ...team,
       points: scoresByTeam[team.id]?.tournamentPoints ?? 0,
-      tiebreaker: calculateAverageMargin(scoresByTeam[team.id]),
+      tiebreaker: calculateAverageMargin(scoresByTeam[team.id]) ?? 0,
     };
     return retVal;
   }) ?? [];
+
+  teamsWithPointsAndRank.sort((a, b) => {
+      const aScore = a.points;
+      const bScore = b.points;
+      const aAvg = a.tiebreaker;
+      const bAvg = b.tiebreaker;
+
+      if(aScore < bScore) {
+        return 1;
+      }
+      if(aScore > bScore) {
+        return -1;
+      }
+      if(aAvg < bAvg) {
+        return 1;
+      }
+      if(aAvg > bAvg) {
+        return -1;
+      }
+      return 0;
+    });
+
   teamsWithPointsAndRank.forEach((team, idx) => {
     const prev = teamsWithPointsAndRank[idx - 1];
     const next = teamsWithPointsAndRank[idx + 1];
@@ -113,7 +138,7 @@ const Leaderboard = () => {
             {rankedTeam.rank}: {rankedTeam.name} (
             {rankedTeam.player1} &amp; {rankedTeam.player2}
             ) - {rankedTeam.points} points (
-            {rankedTeam.tiebreaker} tiebreaker points)
+            {rankedTeam.tiebreaker.toFixed(2)} tiebreaker points)
           </div>
       ))}
       </section>

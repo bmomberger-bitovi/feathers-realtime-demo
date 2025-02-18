@@ -10,23 +10,35 @@ export const TOURNAMENT_SCORE_TEMPLATE = {
 };
 
 export const calculateTeamScores = (scores) => {
+  console.log(scores?.length, "scores")
   const scoresByTeam = {};
   scores.forEach(({ roundPairing: { team1, team2 }, score1, score2 }) => {
     scoresByTeam[team1.id] = scoresByTeam[team1.id] ?? { ...TOURNAMENT_SCORE_TEMPLATE };
     scoresByTeam[team2.id] = scoresByTeam[team2.id] ?? { ...TOURNAMENT_SCORE_TEMPLATE };
 
     const result = calculateGameResult(team1.id, team2.id, score1, score2);
+
     Object.entries(result).forEach(([teamId, points]) => {
       scoresByTeam[teamId].tournamentPoints += points;
     });
+
     if (score1 > score2) {
       scoresByTeam[team1.id].totalWins ++;
-      scoresByTeam[team1.id].totalVictoryMargin += score1 - score2;
+      scoresByTeam[team1.id].totalVictoryMargin += (score1 > 61 ? 1 : 2) * (score1 - score2);
     }
     if (score2 > score1) {
       scoresByTeam[team2.id].totalWins ++;
-      scoresByTeam[team2.id].totalVictoryMargin += score2 - score1;
+      scoresByTeam[team2.id].totalVictoryMargin += (score2 > 61 ? 1 : 2) * (score2 - score1);
     }
+
+    if (team1.name === 'Highlanders') {
+      console.log(scoresByTeam[team1.id]);
+    }
+    if (team2.name === 'Highlanders') {
+      console.log(scoresByTeam[team2.id]);
+    }
+
+
   });
   return scoresByTeam;
 };

@@ -5,7 +5,10 @@ export class TeamsService extends KnexService {}
 
 export const getOptions = (app) => {
   return {
-    paginate: app.get('paginate'),
+    paginate: {
+      ...app.get('paginate'),
+      default: 100
+    },
     Model: app.get('postgresqlClient'),
     name: 'teams'
   }
