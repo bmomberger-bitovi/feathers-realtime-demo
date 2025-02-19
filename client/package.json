@@ -10,13 +10,15 @@
   },
   "dependencies": {
     "@feathersjs/socketio-client": "^5.0.5",
+    "bufferutil": "^4.0.9",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
     "feathers-realtime-react-demo": "file:../server",
-    "figbird": "^0.12.0",
+    "figbird": "^0.18.0",
     "next": "13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "socket.io-client": "^4.6.1"
+    "socket.io-client": "^4.6.1",
+    "utf-8-validate": "^5.0.10"
   }
 }

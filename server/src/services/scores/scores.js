@@ -40,7 +40,15 @@ export const scores = (app) => {
       remove: []
     },
     after: {
-      all: []
+      all: [
+        async (context) => {
+          const { result, app } = context;
+          const resultData = result.data ?? result;
+          for (const resItem of Array.isArray(resultData) ? resultData : [resultData]) {
+            resItem.roundPairing = await app.service('round-pairings').get(resItem.round_pairing_id);
+          }
+        }
+      ]
     },
     error: {
       all: []

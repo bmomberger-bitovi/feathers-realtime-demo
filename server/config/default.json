@@ -11,6 +11,9 @@
   },
   "postgresql": {
     "client": "pg",
-    "connection": "postgres://bmomberger@localhost:5432/bmomberger"
+    "connection": "postgres://airhadoken@localhost:5432/airhadoken",
+    "migrations": {
+      "tableName": "knex_migrations"
+    }
   }
 }

@@ -10,7 +10,9 @@ export const teamsSchema = {
   required: ['id', 'name'],
   properties: {
     id: { type: 'number' },
-    name: { type: 'string' }
+    name: { type: 'string' },
+    player1: { type: 'string' },
+    player2: { type: 'string' },
   }
 }
 export const teamsValidator = getValidator(teamsSchema, dataValidator)
@@ -23,7 +25,7 @@ export const teamsDataSchema = {
   $id: 'TeamsData',
   type: 'object',
   additionalProperties: false,
-  required: ['name'],
+  required: ['name', 'player1', 'player2'],
   properties: {
     ...teamsSchema.properties
   }
